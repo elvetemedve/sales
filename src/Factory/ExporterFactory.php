@@ -2,8 +2,8 @@
 
 namespace App\Factory;
 
+use App\Domain\Payday;
 use App\IO\Exporter;
-use App\Payday;
 
 interface ExporterFactory
 {

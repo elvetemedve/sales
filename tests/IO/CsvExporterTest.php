@@ -2,9 +2,9 @@
 
 namespace App\Tests\IO;
 
+use App\Domain\Payday;
 use App\Exception\IOException;
 use App\IO\CsvExporter;
-use App\Payday;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Exception\IOException as FilesystemIOException;

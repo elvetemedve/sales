@@ -2,8 +2,8 @@
 
 namespace App\IO;
 
+use App\Domain\Payday;
 use App\Exception\IOException;
-use App\Payday;
 use Symfony\Component\Filesystem\Exception\IOException as FilesystemIOException;
 use Symfony\Component\Filesystem\Filesystem;
 

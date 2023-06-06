@@ -1,8 +1,8 @@
 <?php
 
 
-use App\Calendar;
-use App\DayOfWeek;
+use App\Time\Calendar;
+use App\Time\DayOfWeek;
 use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Clock\Clock;

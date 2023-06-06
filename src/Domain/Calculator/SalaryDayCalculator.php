@@ -1,8 +1,8 @@
 <?php
 
-namespace App;
+namespace App\Domain\Calculator;
 
-use DateInterval;
+use App\Time\Calendar;
 use DateTimeImmutable;
 
 class SalaryDayCalculator implements PaymentDayCalculator

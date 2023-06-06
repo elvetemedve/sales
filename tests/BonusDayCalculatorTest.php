@@ -1,10 +1,10 @@
 <?php
 
 
-use App\BonusDayCalculator;
-use App\Calendar;
-use PHPUnit\Framework\TestCase;
+use App\Domain\Calculator\BonusDayCalculator;
+use App\Time\Calendar;
 use PHPUnit\Framework\Attributes\TestWith;
+use PHPUnit\Framework\TestCase;
 
 class BonusDayCalculatorTest extends TestCase
 {

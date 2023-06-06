@@ -1,13 +1,13 @@
 <?php
 
 
-use App\BonusDayCalculator;
-use App\Calendar;
+use App\Domain\Calculator\BonusDayCalculator;
+use App\Domain\Calculator\PaymentDayCalculator;
+use App\Domain\Payday;
+use App\Domain\Payroll;
 use App\Factory\ExporterFactory;
 use App\IO\Exporter;
-use App\Payday;
-use App\PaymentDayCalculator;
-use App\Payroll;
+use App\Time\Calendar;
 use PHPUnit\Framework\TestCase;
 
 final class PayrollTest extends TestCase

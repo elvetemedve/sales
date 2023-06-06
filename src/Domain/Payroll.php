@@ -1,9 +1,11 @@
 <?php
 
-namespace App;
+namespace App\Domain;
 
+use App\Domain\Calculator\PaymentDayCalculator;
 use App\Exception\IOException;
 use App\Factory\ExporterFactory;
+use App\Time\Calendar;
 
 class Payroll
 {

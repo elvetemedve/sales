@@ -2,11 +2,11 @@
 
 namespace App\Tests\acceptance;
 
-use App\BonusDayCalculator;
-use App\Calendar;
+use App\Domain\Calculator\BonusDayCalculator;
+use App\Domain\Calculator\SalaryDayCalculator;
+use App\Domain\Payroll;
 use App\Factory\CsvExporterFactory;
-use App\Payroll;
-use App\SalaryDayCalculator;
+use App\Time\Calendar;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Clock\MockClock;
 use Symfony\Component\Filesystem\Filesystem;

@@ -1,7 +1,9 @@
 <?php
 
-namespace App;
+namespace App\Domain\Calculator;
 
+use App\Time\Calendar;
+use App\Time\DayOfWeek;
 use DateTimeImmutable;
 
 class BonusDayCalculator implements PaymentDayCalculator

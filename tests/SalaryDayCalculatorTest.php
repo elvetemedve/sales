@@ -1,9 +1,9 @@
 <?php
 
-use App\Calendar;
-use App\SalaryDayCalculator;
-use PHPUnit\Framework\TestCase;
+use App\Domain\Calculator\SalaryDayCalculator;
+use App\Time\Calendar;
 use PHPUnit\Framework\Attributes\TestWith;
+use PHPUnit\Framework\TestCase;
 
 final class SalaryDayCalculatorTest extends TestCase
 {
