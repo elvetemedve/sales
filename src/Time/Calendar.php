@@ -16,9 +16,9 @@ class Calendar
     {
     }
 
-    public function isWeekend(DateTimeImmutable $lastDayOfMonth): bool
+    public function isWeekend(DateTimeImmutable $date): bool
     {
-        return $lastDayOfMonth->format('N') >= self::DAY_OF_WEEK_SATURDAY;
+        return $date->format('N') >= self::DAY_OF_WEEK_SATURDAY;
     }
 
     public function nextWeekday(DateTimeImmutable $date, DayOfWeek $weekday): DateTimeImmutable
