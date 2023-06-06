@@ -8,7 +8,11 @@ use Traversable;
 class Payroll
 {
 
-    public function __construct(private Calendar $calendar, private PaymentDayCalculator $baseSalaryCalculator)
+    public function __construct(
+        private Calendar $calendar,
+        private PaymentDayCalculator $baseSalaryCalculator,
+        private PaymentDayCalculator $bonusCalculator
+    )
     {
     }
 
@@ -16,7 +20,7 @@ class Payroll
     {
         $paydays = [];
         foreach ($this->calendar->createOneMonthPeriod() as $month) {
-            $paydays[] = new Payday($this->baseSalaryCalculator->calculate($month));
+            $paydays[] = new Payday($this->baseSalaryCalculator->calculate($month), $this->bonusCalculator->calculate($month));
         }
 
         return new ArrayIterator($paydays);

@@ -1,21 +1,34 @@
 <?php
 
 
+use App\BonusDayCalculator;
 use App\Calendar;
 use App\Payday;
 use App\PaymentDayCalculator;
 use App\Payroll;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Clock\MockClock;
 
 final class PayrollTest extends TestCase
 {
-    private const EXPECTED_NUMBER_OF_MONTHS = 12;
-
     function testCalculate(): void
     {
+        $expectedPaymentDates = [
+            new DateTimeImmutable('2023-01-01'),
+            new DateTimeImmutable('2023-02-01'),
+            new DateTimeImmutable('2023-03-01'),
+        ];
+
+        $expectedBonusDates = [
+            new DateTimeImmutable('2023-01-02'),
+            new DateTimeImmutable('2023-02-02'),
+            new DateTimeImmutable('2023-03-02'),
+        ];
+
         $baseSalaryCalculator = $this->createMock(PaymentDayCalculator::class);
-        $baseSalaryCalculator->method('calculate')->willReturn(new DateTimeImmutable('2023-01-01'));
+        $baseSalaryCalculator->method('calculate')->willReturnOnConsecutiveCalls(...$expectedPaymentDates);
+
+        $bonusCalculator = $this->createMock(BonusDayCalculator::class);
+        $bonusCalculator->method('calculate')->willReturnOnConsecutiveCalls(...$expectedBonusDates);
 
         $calendar = $this->createMock(Calendar::class);
         $calendar
@@ -23,13 +36,17 @@ final class PayrollTest extends TestCase
             ->willReturn(new DatePeriod(
                 new DateTimeImmutable('2023-05-01'),
                 DateInterval::createFromDateString('1 month'),
-                new DateTimeImmutable('2024-05-01'),
+                new DateTimeImmutable('2023-08-01'),
             ));
 
-        $payroll = new Payroll($calendar, $baseSalaryCalculator);
+        $payroll = new Payroll($calendar, $baseSalaryCalculator, $bonusCalculator);
         $paydays = $payroll->generate();
 
-        $this->assertCount(self::EXPECTED_NUMBER_OF_MONTHS, $paydays);
-        $this->assertContainsOnlyInstancesOf(Payday::class, $paydays);
+        $this->assertCount(count($expectedPaymentDates), $paydays);
+        foreach ($paydays as $payday) {
+            $this->assertEquals(new Payday(current($expectedPaymentDates), current($expectedBonusDates)), $payday);
+            next($expectedPaymentDates);
+            next($expectedBonusDates);
+        }
     }
 }
