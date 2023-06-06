@@ -1,6 +1,7 @@
 <?php
 
 
+use App\Calendar;
 use App\Payday;
 use App\PaymentDayCalculator;
 use App\Payroll;
@@ -16,7 +17,16 @@ final class PayrollTest extends TestCase
         $baseSalaryCalculator = $this->createMock(PaymentDayCalculator::class);
         $baseSalaryCalculator->method('calculate')->willReturn(new DateTimeImmutable('2023-01-01'));
 
-        $payroll = new Payroll(new MockClock('2023-05-01 00:00:00'), $baseSalaryCalculator);
+        $calendar = $this->createMock(Calendar::class);
+        $calendar
+            ->method('createOneMonthPeriod')
+            ->willReturn(new DatePeriod(
+                new DateTimeImmutable('2023-05-01'),
+                DateInterval::createFromDateString('1 month'),
+                new DateTimeImmutable('2024-05-01'),
+            ));
+
+        $payroll = new Payroll($calendar, $baseSalaryCalculator);
         $paydays = $payroll->generate();
 
         $this->assertCount(self::EXPECTED_NUMBER_OF_MONTHS, $paydays);

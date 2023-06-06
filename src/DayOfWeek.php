@@ -2,7 +2,7 @@
 
 namespace App;
 
-enum Weekday
+enum DayOfWeek
 {
     case Monday;
     case Tuesday;
