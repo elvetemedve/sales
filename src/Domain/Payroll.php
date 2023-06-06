@@ -14,7 +14,7 @@ class Payroll
         private Calendar $calendar,
         private PaymentDayCalculator $baseSalaryCalculator,
         private PaymentDayCalculator $bonusCalculator,
-        private ExporterFactory $csvExporterFactory
+        private ExporterFactory $exporterFactory
     )
     {
     }
@@ -30,6 +30,6 @@ class Payroll
             $paydays[] = new Payday($this->baseSalaryCalculator->calculate($month), $this->bonusCalculator->calculate($month));
         }
 
-        $this->csvExporterFactory->createForPayday($paydays)->exportToFile($filename);
+        $this->exporterFactory->createForPayday($paydays)->exportToFile($filename);
     }
 }
