@@ -3,6 +3,8 @@
 
 use App\BonusDayCalculator;
 use App\Calendar;
+use App\Factory\ExporterFactory;
+use App\IO\Exporter;
 use App\Payday;
 use App\PaymentDayCalculator;
 use App\Payroll;
@@ -30,6 +32,20 @@ final class PayrollTest extends TestCase
         $bonusCalculator = $this->createMock(BonusDayCalculator::class);
         $bonusCalculator->method('calculate')->willReturnOnConsecutiveCalls(...$expectedBonusDates);
 
+        $csvExporter = $this->createMock(Exporter::class);
+        $csvExporter->expects($this->once())->method('exportToFile')->with($this->identicalTo('testfile'));
+
+        $csvExporterFactory = $this->createMock(ExporterFactory::class);
+        $csvExporterFactory->expects($this->once())->method('createForPayday')->with($this->callback(function($paydays) use($expectedPaymentDates, $expectedBonusDates) {
+            foreach ($paydays as $payday) {
+                $this->assertEquals(new Payday(current($expectedPaymentDates), current($expectedBonusDates)), $payday);
+                next($expectedPaymentDates);
+                next($expectedBonusDates);
+            }
+
+            return true;
+        }))->willReturn($csvExporter);
+
         $calendar = $this->createMock(Calendar::class);
         $calendar
             ->method('createOneMonthPeriod')
@@ -39,14 +55,7 @@ final class PayrollTest extends TestCase
                 new DateTimeImmutable('2023-08-01'),
             ));
 
-        $payroll = new Payroll($calendar, $baseSalaryCalculator, $bonusCalculator);
-        $paydays = $payroll->generate();
-
-        $this->assertCount(count($expectedPaymentDates), $paydays);
-        foreach ($paydays as $payday) {
-            $this->assertEquals(new Payday(current($expectedPaymentDates), current($expectedBonusDates)), $payday);
-            next($expectedPaymentDates);
-            next($expectedBonusDates);
-        }
+        $payroll = new Payroll($calendar, $baseSalaryCalculator, $bonusCalculator, $csvExporterFactory);
+        $payroll->generate('testfile');
     }
 }

@@ -2,8 +2,8 @@
 
 namespace App;
 
-use ArrayIterator;
-use Traversable;
+use App\Exception\IOException;
+use App\Factory\ExporterFactory;
 
 class Payroll
 {
@@ -11,18 +11,23 @@ class Payroll
     public function __construct(
         private Calendar $calendar,
         private PaymentDayCalculator $baseSalaryCalculator,
-        private PaymentDayCalculator $bonusCalculator
+        private PaymentDayCalculator $bonusCalculator,
+        private ExporterFactory $csvExporterFactory
     )
     {
     }
 
-    public function generate(): Traversable
+    /**
+     * @throws IOException
+     */
+    public function generate(string $filename): void
     {
         $paydays = [];
+
         foreach ($this->calendar->createOneMonthPeriod() as $month) {
             $paydays[] = new Payday($this->baseSalaryCalculator->calculate($month), $this->bonusCalculator->calculate($month));
         }
 
-        return new ArrayIterator($paydays);
+        $this->csvExporterFactory->createForPayday($paydays)->exportToFile($filename);
     }
 }

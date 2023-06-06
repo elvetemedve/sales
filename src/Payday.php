@@ -10,7 +10,7 @@ final class Payday
     {
     }
 
-    public function getPaymentDate(): DateTimeImmutable
+    public function getSalaryDate(): DateTimeImmutable
     {
         return $this->paymentDate;
     }
